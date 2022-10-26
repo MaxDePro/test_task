@@ -4,11 +4,24 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+
 from .models import *
+from django.core import serializers
+from .resources import UsersResources
 
 
 def user_to_xml(request):
-    pass
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(
+        content_type='text/xml',
+        headers={'Content-Disposition': 'attachment; filename="user_data.xml"'},
+    )
+
+    # generate xml_data
+    data = serializers.serialize("xml", Users.objects.all(), fields=('first_name', 'last_name'))
+
+    response.write(data)
+    return response
 
 
 def user_to_csv(request):
@@ -59,5 +72,5 @@ def user_list(request):
 
 
 def home_page(request):
-
-    return render(request, 'user_data/home.html', {})
+    current_user = request.user
+    return render(request, 'user_data/home.html', context={'curr_user': current_user})

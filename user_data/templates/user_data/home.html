@@ -4,7 +4,7 @@
 {% if user.is_authenticated %}
 <center>
     <h1>
-        Hello user
+        Hello {{curr_user}}
     </h1>
 </center>
 {% else %}
@@ -13,7 +13,11 @@
         You should login to see content of there page
     </h1>
     <a href="{% url 'login_user' %}" class="btn btn-primary">Login</a>
+    {% endif %}
+
+
+
 </center>
 
-{% endif %}
+
 {% endblock %}
