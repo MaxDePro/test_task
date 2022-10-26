@@ -1,13 +1,43 @@
-import csv
+import csv, io
+import xml
 
+from .forms import UsersForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
-
+import re
 from .models import *
 from django.core import serializers
 from .resources import UsersResources
+
+
+def csv_upload(request):
+    template = 'user_data/csv_upload.html'
+    prompt = {
+        'order': 'Order of csv must contain username, password and join date'
+    }
+
+    if request.method == 'GET':
+        return render(request, template, prompt)
+
+    csv_file = request.FILES['file']
+
+    if not csv_file.name.endswith('.csv'):
+        messages.error(request, 'This is not csv file pick another one')
+
+    data_set = csv_file.read().decode('UTF-8')
+    io_string = io.StringIO(data_set)
+    next(io_string)
+
+    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+        (_, created) = Users.objects.update_or_create(
+            username=column[0],
+            password=column[1],
+            date_of_join=column[2]
+            )
+    context = {}
+    return render(request, template, context)
 
 
 def user_to_xml(request):
@@ -41,6 +71,21 @@ def user_to_csv(request):
         writer.writerow([user.username, user.password, user.date_of_join])
 
     return response
+
+
+def create_user(request):
+    submitted = False
+    if request.method == 'POST':
+        form = UsersForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('?submitted=True')
+    else:
+        form = UsersForm
+        if 'submitted' in request.GET:
+            submitted = True
+
+    return render(request, 'user_data/create_user.html', context={'form': form, 'submitted': submitted})
 
 
 def logout_user(request):

@@ -17,6 +17,12 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'user_to_xml' %}">Collect user data to xml</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'csv_file' %}">Upload csv_file</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'create_user' %}">Create user</a>
+          </li>
 
         {% endif %}
         {% if user.is_authenticated %}

@@ -8,4 +8,7 @@ urlpatterns = [
     path('logout_user', logout_user, name='logout_user'),
     path('user_to_csv', user_to_csv, name='user_to_csv'),
     path('user_to_xml', user_to_xml, name='user_to_xml'),
+    path('csv_file', csv_upload, name='csv_file'),
+    # path('xml_file', xml_upload, name='xml_file'),
+    path('create_user', create_user, name='create_user'),
 ]
