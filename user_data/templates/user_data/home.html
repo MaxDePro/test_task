@@ -1,0 +1,19 @@
+{% extends 'user_data/main.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<center>
+    <h1>
+        Hello user
+    </h1>
+</center>
+{% else %}
+<center>
+    <h1>
+        You should login to see content of there page
+    </h1>
+    <a href="{% url 'login_user' %}" class="btn btn-primary">Login</a>
+</center>
+
+{% endif %}
+{% endblock %}

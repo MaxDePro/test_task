@@ -1,0 +1,25 @@
+{% extends 'user_data/main.html' %}
+
+{% block content %}
+<h1>Users: </h1>
+    {% for user_data in users %}
+        username : {{ user }}
+        <ul>
+            <li>
+                user first name : {{ user_data.first_name }}
+            </li>
+            <li>
+                user last name : {{ user_data.last_name }}
+            </li>
+            <li>
+                user date of join : {{ user_data.date_of_join }}
+            </li>
+            {% if user.is_authenticated and user.is_staff %}
+            <li>
+                user password  : {{ user_data.password }}
+            </li>
+            {% endif %}
+        </ul>
+<br><br>
+    {% endfor %}
+{% endblock %}
