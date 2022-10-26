@@ -1,16 +1,27 @@
 import csv, io
-import xml
 
+from .models import *
 from .forms import UsersForm
+
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
-import re
-from .models import *
 from django.core import serializers
-from .resources import UsersResources
 
+
+
+# def csv_upload(request):
+#     if request.method == 'POST':
+#         form = UsersForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             # file is saved
+#             form.save()
+#             return HttpResponseRedirect('/success/url/')
+#     else:
+#         form = UsersForm
+#     return render(request, 'user_data/csv_upload.html', {'form': form})
 
 def csv_upload(request):
     template = 'user_data/csv_upload.html'
@@ -31,11 +42,14 @@ def csv_upload(request):
     next(io_string)
 
     for column in csv.reader(io_string, delimiter=',', quotechar='|'):
-        (_, created) = Users.objects.update_or_create(
-            username=column[0],
-            password=column[1],
-            date_of_join=column[2]
-            )
+        if column[0] and column[1] and column[2]:
+            if column[0].find('(') >= 1 or column[0].find('[') >= 1:
+                continue
+            (_, created) = Users.objects.update_or_create(
+                username=column[0],
+                password=column[1],
+                date_of_join=column[2]
+                )
     context = {}
     return render(request, template, context)
 
@@ -73,6 +87,14 @@ def user_to_csv(request):
     return response
 
 
+def user_detail(request, user_id):
+    user = Users.objects.get(pk=user_id)
+    context = {
+        'usr': user
+    }
+    return render(request, 'user_data/user_detail.html', context)
+
+
 def create_user(request):
     submitted = False
     if request.method == 'POST':
@@ -107,6 +129,23 @@ def login_user(request):
             return redirect('login_user')
     else:
         return render(request, 'user_data/login_user.html', {})
+
+
+def register_user(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            messages.success(request, 'You success registrated')
+            return redirect('home')
+    else:
+        form = UserCreationForm()
+
+    return render(request, 'user_data/register_user.html', context={'form': form})
 
 
 def user_list(request):

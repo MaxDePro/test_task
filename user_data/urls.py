@@ -11,4 +11,6 @@ urlpatterns = [
     path('csv_file', csv_upload, name='csv_file'),
     # path('xml_file', xml_upload, name='xml_file'),
     path('create_user', create_user, name='create_user'),
+    path('register_user', register_user, name='register_user'),
+    path('user_detail/<user_id>', user_detail, name='user_detail'),
 ]

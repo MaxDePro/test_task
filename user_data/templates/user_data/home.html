@@ -15,16 +15,6 @@
     <a href="{% url 'login_user' %}" class="btn btn-primary">Login</a>
     {% endif %}
 
-    <form enctype="multipart/form-data" action="{% url 'csv_file' %}" method="post">
-        {% csrf_token %}
-        <div class="">
-            import csv file
-            <input id="csv_file" type="file" placeholder="csv_file">
-        </div>
-        <button class="btn btn-primary">
-            Submit
-        </button>
-    </form>
 
 </center>
 

@@ -1,0 +1,17 @@
+{% extends 'user_data/main.html' %}
+
+{% block content %}
+{% if form.errors %}
+    <p>There is an errors in your form</p>
+    {% endif %}
+    <h1>Register new account</h1>
+    <br>
+    <br>
+    <form action="{% url 'register_user' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <br>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+{% endblock %}

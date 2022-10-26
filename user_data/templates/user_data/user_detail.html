@@ -1,0 +1,28 @@
+{% extends 'user_data/main.html' %}
+
+{% block content %}
+
+<div class="card">
+  <h5 class="card-header">User</h5>
+  <div class="card-body">
+    <h5 class="card-title">Username : {{ usr.username }}</h5>
+    <p class="card-text">
+        <ul>
+        <li>
+            user firstname: {{ usr.first_name }}
+        </li>
+        <li>
+          user lastname: {{ usr.last_name }}
+        </li>
+        <li>
+            user password: {{ usr.password }}
+        </li>
+        <li>
+            user time of join: {{ usr.date_of_join }}
+        </li>
+        </ul>
+    </p>
+  </div>
+</div>
+
+{% endblock %}

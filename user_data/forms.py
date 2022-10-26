@@ -21,5 +21,6 @@ class UsersForm(ModelForm):
             'username': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'username'}),
             'password': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'password'}),
             'date_of_join': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'date_of_join'}),
+            'file_field': forms.FileInput(attrs={'class': 'form-control', 'placeholder': 'input file'}),
         }
 

@@ -12,35 +12,36 @@
 
         {% if user.is_authenticated and user.is_staff %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'user_to_csv' %}">Collect user data to csv</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'user_to_xml' %}">Collect user data to xml</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" href="{% url 'csv_file' %}">Upload csv_file</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'create_user' %}">Create user</a>
           </li>
-
+          <div class="dropdown">
+            <button class="btn btn-primary  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Collect data
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="nav-link" href="{% url 'user_to_csv' %}">Collect user data to csv</a></li>
+              <li><a class="nav-link" href="{% url 'user_to_xml' %}">Collect user data to xml</a></li>
+            </ul>
+          </div>
         {% endif %}
         {% if user.is_authenticated %}
           <li class="nav-item">
             <a class="btn btn-danger" href="{% url 'logout_user' %}">logout</a>
           </li>
         {% else %}
+        <li class="nav-item">
+            <a class="btn btn-success" href="{% url 'register_user' %}">Register</a>
+          </li>
           <li class="nav-item">
             <a class="btn btn-primary" href="{% url 'login_user' %}">login</a>
           </li>
         {% endif %}
 
       </ul>
-      <form class="d-flex" role="search" method="post" action="">
-        {% csrf_token %}
-        <input name="searched" class="form-control me-2" type="search" placeholder="Search venue" aria-label="Search">
-        <button class="btn btn-outline-secondary" type="submit">Search</button>
-      </form>
+
     </div>
   </div>
 </nav>
