@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # test_task
 
 
@@ -10,3 +11,6 @@
 # Also, being an administrator, you can upload a data file from which new models will be created
 
 # It is also possible to upload a file in the admin panel via django import
+=======
+# test_task
+>>>>>>> 2991428 (Initial commit)
