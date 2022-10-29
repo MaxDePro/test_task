@@ -1,7 +1,7 @@
 import csv, io
 
 from .models import *
-from .forms import UsersForm
+from .forms import *
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
@@ -10,18 +10,38 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.core import serializers
 
+import re
+from .serializers import parse_xml_data
 
 
-# def csv_upload(request):
-#     if request.method == 'POST':
-#         form = UsersForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             # file is saved
-#             form.save()
-#             return HttpResponseRedirect('/success/url/')
-#     else:
-#         form = UsersForm
-#     return render(request, 'user_data/csv_upload.html', {'form': form})
+def xml_upload(request):
+    if request.method == 'POST':
+        form = UploadModelForm(request.POST, request.FILES)
+        if form.is_valid():
+            print('hello')
+            users_data = parse_xml_data(request.FILES['xml_file'])
+            print(users_data)
+            for person_id in users_data:
+                (_, created) = Users.objects.update_or_create(
+                    first_name=re.sub('\(.*?\)', '', users_data.get(person_id).get('first_name')),
+                    last_name=re.sub('\(.*?\)', '', users_data.get(person_id).get('last_name')),
+                )
+        return redirect('home')
+    else:
+        form = UploadModelForm()
+    return render(request, 'user_data/xml_upload.html', {'form': form})
+
+
+# def xml_upload_2(request):
+#     xml_file_2 = request.FILES['xml_file_2']
+#     users_data = parse_xml_data(xml_file_2)
+#     for person_id in users_data:
+#         (_, created) = Users.objects.update_or_create(
+#             first_name=users_data.get(person_id).get('first_name'),
+#             password=users_data.get(person_id).get('last_name'),
+#         )
+#     return render(request, 'user_data/xml_upload_2.html', {})
+
 
 def csv_upload(request):
     template = 'user_data/csv_upload.html'
@@ -44,7 +64,7 @@ def csv_upload(request):
     for column in csv.reader(io_string, delimiter=',', quotechar='|'):
         if column[0] and column[1] and column[2]:
             if column[0].find('(') >= 1 or column[0].find('[') >= 1:
-                continue
+                column[0] = re.sub('\(.*?\)', '', column[0])
             (_, created) = Users.objects.update_or_create(
                 username=column[0],
                 password=column[1],

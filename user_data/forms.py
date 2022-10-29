@@ -4,6 +4,20 @@ from django import forms
 from django.forms import ModelForm
 
 
+class UploadModelForm(forms.Form):
+    file = forms.FileField()
+
+    class Meta:
+        model = UploadFileModel
+
+
+# class UploadModelForm(forms.ModelForm):
+#     class Meta:
+#         model = UploadFileModel
+#         fields = ('description', 'document', )
+
+
+
 class UsersForm(ModelForm):
     class Meta:
         model = Users

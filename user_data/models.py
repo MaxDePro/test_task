@@ -1,9 +1,9 @@
 from django.db import models
 
 
-class UploadModel(models.Model):
-    title = models.CharField('title for upload file', max_length=120)
-    file = models.FileField('upload file', null=True)
+class UploadFileModel(models.Model):
+    document = models.FileField(upload_to='media')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
 
 
 class Users(models.Model):
