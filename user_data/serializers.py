@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
 
-xml_file = "/Users/user/PycharmProjects/test_task_django/test_task/test_task.xml"
+# xml_file = "/Users/user/PycharmProjects/test_task_django/test_task/test_task.xml"
 
 
 def parse_xml_data(xml_file):

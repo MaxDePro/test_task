@@ -14,13 +14,12 @@ import re
 from .serializers import parse_xml_data
 
 
+# Creating a page to upload xml file with users data
 def xml_upload(request):
     if request.method == 'POST':
         form = UploadModelForm(request.POST, request.FILES)
         # if form.is_valid():
-        print('hello')
         users_data = parse_xml_data(request.FILES['xml_file'])
-        print(users_data)
         for person_id in users_data:
             (_, created) = Users.objects.update_or_create(
                 first_name=re.sub('\(.*?\)', '', users_data.get(person_id).get('first_name')),
@@ -43,6 +42,7 @@ def xml_upload(request):
 #     return render(request, 'user_data/xml_upload_2.html', {})
 
 
+# Creating a page to upload csv file with users data
 def csv_upload(request):
     template = 'user_data/csv_upload.html'
     prompt = {
@@ -74,6 +74,7 @@ def csv_upload(request):
     return render(request, template, context)
 
 
+# Creating a page to download xml file with users data
 def user_to_xml(request):
     # Create the HttpResponse object with the appropriate CSV header.
     response = HttpResponse(
@@ -88,6 +89,7 @@ def user_to_xml(request):
     return response
 
 
+# Creating a page to download csv file with users data
 def user_to_csv(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename=user_data.csv'
@@ -107,6 +109,7 @@ def user_to_csv(request):
     return response
 
 
+# Creating a page clicking to username of user in user list we get detail info about user
 def user_detail(request, user_id):
     user = Users.objects.get(pk=user_id)
     context = {
@@ -115,6 +118,7 @@ def user_detail(request, user_id):
     return render(request, 'user_data/user_detail.html', context)
 
 
+# Creating a page to create new users
 def create_user(request):
     submitted = False
     if request.method == 'POST':
@@ -130,12 +134,14 @@ def create_user(request):
     return render(request, 'user_data/create_user.html', context={'form': form, 'submitted': submitted})
 
 
+# Creating a page to logout user
 def logout_user(request):
     logout(request)
     messages.success(request, 'You were logout!')
     return redirect('home')
 
 
+# Creating a page to login user
 def login_user(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -151,6 +157,7 @@ def login_user(request):
         return render(request, 'user_data/login_user.html', {})
 
 
+# Creating a page to register new users
 def register_user(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -168,13 +175,14 @@ def register_user(request):
     return render(request, 'user_data/register_user.html', context={'form': form})
 
 
+# Creating view of list of all users
 def user_list(request):
     users = Users.objects.all()
 
     context = {'users': users}
     return render(request, 'user_data/users.html', context)
 
-
+# Creating view of homepage
 def home_page(request):
     current_user = request.user
     return render(request, 'user_data/home.html', context={'curr_user': current_user})
