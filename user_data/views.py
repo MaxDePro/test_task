@@ -17,15 +17,15 @@ from .serializers import parse_xml_data
 def xml_upload(request):
     if request.method == 'POST':
         form = UploadModelForm(request.POST, request.FILES)
-        if form.is_valid():
-            print('hello')
-            users_data = parse_xml_data(request.FILES['xml_file'])
-            print(users_data)
-            for person_id in users_data:
-                (_, created) = Users.objects.update_or_create(
-                    first_name=re.sub('\(.*?\)', '', users_data.get(person_id).get('first_name')),
-                    last_name=re.sub('\(.*?\)', '', users_data.get(person_id).get('last_name')),
-                )
+        # if form.is_valid():
+        print('hello')
+        users_data = parse_xml_data(request.FILES['xml_file'])
+        print(users_data)
+        for person_id in users_data:
+            (_, created) = Users.objects.update_or_create(
+                first_name=re.sub('\(.*?\)', '', users_data.get(person_id).get('first_name')),
+                last_name=re.sub('\(.*?\)', '', users_data.get(person_id).get('last_name')),
+            )
         return redirect('home')
     else:
         form = UploadModelForm()
